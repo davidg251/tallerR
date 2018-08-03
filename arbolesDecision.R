@@ -7,13 +7,17 @@ install.packages("rpart.plot")
 install.packages("ROCR")
 
 library(party)
-#
 
 dataSet <- read.table('/code/breastCancerData.csv', header = TRUE, sep = ",")
-dim(dataSet)
-names(dataSet)
-head(dataSet)
+#dim(dataSet)
+#names(dataSet)
+#head(dataSet)
 
+indexes <- sample(2, nrow(dataSet), replace=TRUE, prob=c(0.7, 0.3))
+trainSet <- dataSet[indexes==1,]
+testSet <- dataSet[indexes==2,]
+#dim(trainSet)
+#dim(testSet)
 
 # Formula para predecir si una paciente necesita
 # quimio dependiendo de su edad, el tamaño del tumor
@@ -24,9 +28,9 @@ Formula <- Quimio ~ Edad +
                     Invasion + 
                     Grado.Maligno
 
-ctree <- ctree(Formula, data=dataSet)
+ctree <- ctree(Formula, data=set_entrenamiento)
 
-table(predict(ctree), dataSet$Quimio)
+table(predict(ctree), set_prueba$Quimio)
 
 print(ctree)
 
